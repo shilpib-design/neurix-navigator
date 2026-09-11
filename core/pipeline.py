@@ -24,6 +24,7 @@ from core.learning import LearningEngine
 from core.policy import PolicyEngine
 from core.meter import CustomerUsageMeter
 from core.storage import LeanStorageManager
+from core.exploration import ExplorationBudget, ExplorationDecision, ExplorationPlanner
 
 from orchestrator.models import AcquisitionRequest as ArchReq, AcquisitionResult
 from orchestrator.orchestrator import TargetExtractorRegistry, TargetValidator
@@ -51,9 +52,32 @@ class UnifiedPipeline:
         self.policy_engine = PolicyEngine()
         self.usage_meter = CustomerUsageMeter()
         self.storage_manager = LeanStorageManager()
+        self.exploration_planner = ExplorationPlanner()
 
         self.extractor_registry = extractor_registry or TargetExtractorRegistry()
         self.validator = validator or TargetValidator()
+
+    def plan_exploration(
+        self,
+        request: AcquisitionRequest,
+        max_attempts: Optional[int] = None,
+        attempts_consumed: int = 0,
+    ) -> List[ExplorationDecision]:
+        """Plan exploration without executing providers or consuming vendor credits."""
+        profile = TargetIntelligence.analyze(request)
+        candidates = self.candidate_generator.generate_candidates(
+            profile, request.customer_preferences
+        )
+        budget = ExplorationBudget(
+            max_attempts=(
+                self.exploration_planner.default_max_attempts
+                if max_attempts is None else max_attempts
+            ),
+            attempts_consumed=attempts_consumed,
+        )
+        return self.exploration_planner.plan(
+            candidates, profile, request.customer_preferences, budget
+        )
 
     def process_request(self, request: AcquisitionRequest) -> Dict[str, Any]:
         pipeline_start = time.time()

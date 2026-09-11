@@ -34,13 +34,15 @@ class CandidateGenerator:
     ) -> bool:
         if not capability.enabled or capability.current_health in [HealthState.FAILED, HealthState.DISABLED]:
             return False
-        if profile.inferred_country and profile.inferred_country not in capability.country_capabilities:
+        if (
+            profile.inferred_country
+            and profile.inferred_country != "Unknown"
+            and profile.inferred_country not in capability.country_capabilities
+        ):
             return False
         if profile.target_type not in capability.target_capabilities and "generic" not in capability.target_capabilities:
             return False
         if profile.location_sensitivity and not capability.location_capabilities:
             return False
         avg_lat = capability.historical_metrics.get("avg_latency_ms", 3000)
-        if preferences.max_latency_ms and avg_lat > preferences.max_latency_ms * 1.5:
-            return False
-        return True
+        return not preferences.max_latency_ms or avg_lat <= preferences.max_latency_ms * 1.5

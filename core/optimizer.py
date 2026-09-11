@@ -5,7 +5,6 @@ expected cost per validated result that satisfies customer SLA preferences.
 """
 
 import itertools
-import random
 from typing import List, Dict, Any, Tuple
 from core.models import TargetProfile, CustomerPreferences, CapabilityMetadata
 from core.rate_card import RateCardRegistry
@@ -80,12 +79,8 @@ class EconomicOptimizer:
         if not candidates:
             return [], {"cost_per_validated": float("inf")}, False
 
-        # Controlled Exploration (budget-controlled percentage)
-        is_exploration = (random.random() < self.exploration_rate)
-        if is_exploration and len(candidates) > 1:
-            explored_cand = random.choice(candidates)
-            eval_res = self.evaluate_cascade([explored_cand], profile)
-            return [explored_cand], eval_res, True
+        # Exploration is planned by ExplorationPlanner; this class only evaluates economics.
+        is_exploration = False
 
         # Generate candidate cascades (lengths 1, 2, 3)
         possible_cascades = []
