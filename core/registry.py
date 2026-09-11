@@ -25,6 +25,23 @@ class ProviderRegistry:
         if key not in self._health_history:
             self._health_history[key] = []
 
+    def bind_adapter(self, capability_id: str, adapter: Any) -> None:
+        """Bind an executable provider adapter to a registered capability."""
+        capability = self._capabilities.get(capability_id)
+        if capability is None:
+            raise KeyError(f"Unknown capability: {capability_id}")
+        capability.adapter = adapter
+
+    def resolve_adapter(self, capability_id: str) -> Optional[Any]:
+        """Return an adapter only for an enabled registered capability."""
+        capability = self._capabilities.get(capability_id)
+        if not capability or not capability.enabled:
+            return None
+        return capability.adapter
+
+    def is_executable(self, capability_id: str) -> bool:
+        return self.resolve_adapter(capability_id) is not None
+
     def unregister(self, capability_id: str):
         if capability_id in self._capabilities:
             del self._capabilities[capability_id]
@@ -185,3 +202,25 @@ class ProviderRegistry:
             estimated_cost=0.0002,
             historical_metrics={"success_rate": 0.95, "validation_rate": 0.90, "avg_latency_ms": 8000, "sample_size": 40}
         ))
+
+        self.bind_adapter("Context.dev", self._load_adapter("Context.dev"))
+        self.bind_adapter("String", self._load_adapter("String"))
+        self.bind_adapter("Scrapfly", self._load_adapter("Scrapfly"))
+
+        # Browser/proxy capabilities remain registered for lifecycle and future
+        # integration, but are not part of Stage 2A default routing.
+        for capability_id in (
+            "GeoNode Res", "GeoNode DC", "DI Res", "DI Mobile", "Donut Browser"
+        ):
+            self.set_enabled(capability_id, False)
+
+    @staticmethod
+    def _load_adapter(provider_id: str) -> Any:
+        adapter_types = {
+            "Context.dev": ("providers.context_dev_adapter", "ContextDevProvider"),
+            "String": ("providers.string_adapter", "StringProvider"),
+            "Scrapfly": ("providers.scrapfly_adapter", "ScrapflyProvider"),
+        }
+        module_name, class_name = adapter_types[provider_id]
+        module = __import__(module_name, fromlist=[class_name])
+        return getattr(module, class_name)()

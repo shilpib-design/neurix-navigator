@@ -31,3 +31,19 @@ To run only the core foundation test suite:
 ```bash
 python3 -m unittest tests/test_navigator_v01_core.py
 ```
+
+## Stage 2A Decisioning
+
+`core.UnifiedPipeline` is the canonical Navigator execution path. It performs
+target intelligence, capability filtering, economic cascade selection, bound
+adapter execution, extraction, validation, telemetry/learning, policy update,
+and billing. The default active capabilities are String, Scrapfly, and
+Context.dev; AlterLab and browser/proxy capabilities remain registered but are
+excluded from default routing.
+
+Capabilities are executable only when enabled and explicitly bound to an
+adapter through `ProviderRegistry.bind_adapter`. An unbound capability fails
+with an explicit provider error; the pipeline never fabricates successful HTML.
+The legacy `orchestrator/`, `scoring/`, and `telemetry/` packages remain
+compatibility surfaces. Their strategy scorer does not control Navigator
+execution; `EconomicOptimizer` and `PolicyEngine` do.

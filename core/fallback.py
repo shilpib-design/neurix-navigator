@@ -4,7 +4,8 @@ Dynamically adjusts remaining cascade steps during execution based on observed f
 """
 
 from typing import List, Optional
-from core.models import CapabilityMetadata, FailureCategory
+from core.models import CapabilityMetadata, CustomerPreferences, FailureCategory, TargetProfile
+from core.candidate import CandidateGenerator
 from core.registry import ProviderRegistry
 
 
@@ -20,7 +21,10 @@ class FallbackManager:
         self,
         remaining_cascade: List[CapabilityMetadata],
         failed_capability: CapabilityMetadata,
-        failure_category: str
+        failure_category: str,
+        candidate_pool: Optional[List[CapabilityMetadata]] = None,
+        profile: Optional[TargetProfile] = None,
+        preferences: Optional[CustomerPreferences] = None
     ) -> List[CapabilityMetadata]:
         """
         Dynamically adjusts remaining cascade capabilities based on failure type.
@@ -29,8 +33,15 @@ class FallbackManager:
 
         if not adjusted:
             # Fetch backup capabilities from registry if initial list depleted
-            all_caps = self.registry.list_capabilities(enabled_only=True)
+            all_caps = candidate_pool or self.registry.list_capabilities(enabled_only=True)
             adjusted = [c for c in all_caps if c.capability_id != failed_capability.capability_id]
+
+        adjusted = [
+            c for c in adjusted
+            if not profile or CandidateGenerator.is_compatible(
+                c, profile, preferences or CustomerPreferences()
+            )
+        ]
 
         if failure_category == FailureCategory.RATE_LIMIT.value:
             # Prefer different provider API or browser
