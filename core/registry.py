@@ -1,0 +1,187 @@
+"""
+Dynamic Provider Registry & Health State Machine for Neurix Navigator v0.1 Core.
+Handles dynamic addition, removal, enabling/disabling of providers, and sliding-window health management.
+"""
+
+import time
+from typing import Dict, Any, List, Optional
+from core.models import CapabilityMetadata, HealthState
+
+
+class ProviderRegistry:
+    """
+    Central registry for acquisition capabilities and health state transitions.
+    Decoupled from decision logic.
+    """
+
+    def __init__(self):
+        self._capabilities: Dict[str, CapabilityMetadata] = {}
+        self._health_history: Dict[str, List[Dict[str, Any]]] = {}
+        self._register_default_capabilities()
+
+    def register(self, capability: CapabilityMetadata):
+        key = capability.capability_id
+        self._capabilities[key] = capability
+        if key not in self._health_history:
+            self._health_history[key] = []
+
+    def unregister(self, capability_id: str):
+        if capability_id in self._capabilities:
+            del self._capabilities[capability_id]
+
+    def set_enabled(self, capability_id: str, enabled: bool):
+        if capability_id in self._capabilities:
+            self._capabilities[capability_id].enabled = enabled
+            if not enabled:
+                self._capabilities[capability_id].current_health = HealthState.DISABLED
+            else:
+                self._capabilities[capability_id].current_health = HealthState.AVAILABLE
+
+    def get(self, capability_id: str) -> Optional[CapabilityMetadata]:
+        return self._capabilities.get(capability_id)
+
+    def list_capabilities(self, enabled_only: bool = True) -> List[CapabilityMetadata]:
+        if enabled_only:
+            return [c for c in self._capabilities.values() if c.enabled]
+        return list(self._capabilities.values())
+
+    def update_health(self, capability_id: str, success: bool, failure_category: Optional[str] = None):
+        cap = self._capabilities.get(capability_id)
+        if not cap or not cap.enabled:
+            return
+
+        history = self._health_history.get(capability_id, [])
+        history.append({
+            "timestamp": time.time(),
+            "success": success,
+            "failure_category": failure_category
+        })
+        # Keep sliding window of last 20 attempts
+        if len(history) > 20:
+            history.pop(0)
+        self._health_history[capability_id] = history
+
+        # Calculate health state based on sliding window
+        recent = history[-10:] if len(history) >= 10 else history
+        recent_fails = sum(1 for h in recent if not h["success"])
+        fail_rate = recent_fails / len(recent) if recent else 0.0
+
+        if failure_category == "RATE_LIMIT":
+            cap.current_health = HealthState.RATE_LIMITED
+        elif fail_rate >= 0.7:
+            cap.current_health = HealthState.FAILED
+        elif fail_rate >= 0.3:
+            cap.current_health = HealthState.DEGRADED
+        else:
+            cap.current_health = HealthState.AVAILABLE
+
+    def _register_default_capabilities(self):
+        # 1. Context.dev API
+        self.register(CapabilityMetadata(
+            provider_id="Context.dev",
+            capability_id="Context.dev",
+            enabled=True,
+            acquisition_method="api",
+            country_capabilities=["US", "IN"],
+            estimated_cost=0.001,
+            historical_metrics={"success_rate": 0.85, "validation_rate": 0.80, "avg_latency_ms": 1500, "sample_size": 30}
+        ))
+
+        # 2. String API
+        self.register(CapabilityMetadata(
+            provider_id="String",
+            capability_id="String",
+            enabled=True,
+            acquisition_method="api",
+            country_capabilities=["US", "IN"],
+            estimated_cost=0.0015,
+            historical_metrics={"success_rate": 0.88, "validation_rate": 0.82, "avg_latency_ms": 2500, "sample_size": 30}
+        ))
+
+        # 3. Scrapfly API
+        self.register(CapabilityMetadata(
+            provider_id="Scrapfly",
+            capability_id="Scrapfly",
+            enabled=True,
+            acquisition_method="api",
+            country_capabilities=["US", "IN"],
+            estimated_cost=0.002,
+            historical_metrics={"success_rate": 0.70, "validation_rate": 0.65, "avg_latency_ms": 3500, "sample_size": 20}
+        ))
+
+        # 4. AlterLab API (Disabled by default per Stage 1 active provider specification)
+        self.register(CapabilityMetadata(
+            provider_id="AlterLab",
+            capability_id="AlterLab",
+            enabled=False,
+            current_health=HealthState.DISABLED,
+            acquisition_method="api",
+            country_capabilities=["US", "IN"],
+            estimated_cost=0.0012,
+            historical_metrics={"success_rate": 0.75, "validation_rate": 0.70, "avg_latency_ms": 3000, "sample_size": 15}
+        ))
+
+        # 5. GeoNode Residential (Browser Proxy)
+        self.register(CapabilityMetadata(
+            provider_id="GeoNode Res",
+            capability_id="GeoNode Res",
+            enabled=True,
+            acquisition_method="browser",
+            proxy_type="Residential",
+            country_capabilities=["US", "IN"],
+            browser_support=True,
+            estimated_cost=0.0003,
+            historical_metrics={"success_rate": 0.90, "validation_rate": 0.85, "avg_latency_ms": 12000, "sample_size": 30}
+        ))
+
+        # 6. GeoNode Datacenter (Browser Proxy)
+        self.register(CapabilityMetadata(
+            provider_id="GeoNode DC",
+            capability_id="GeoNode DC",
+            enabled=True,
+            acquisition_method="browser",
+            proxy_type="Datacenter",
+            country_capabilities=["US"],
+            browser_support=True,
+            estimated_cost=0.00015,
+            historical_metrics={"success_rate": 0.80, "validation_rate": 0.75, "avg_latency_ms": 10000, "sample_size": 25}
+        ))
+
+        # 7. DataImpulse Residential
+        self.register(CapabilityMetadata(
+            provider_id="DI Res",
+            capability_id="DI Res",
+            enabled=True,
+            acquisition_method="browser",
+            proxy_type="Residential",
+            country_capabilities=["US", "IN"],
+            browser_support=True,
+            estimated_cost=0.00035,
+            historical_metrics={"success_rate": 0.85, "validation_rate": 0.80, "avg_latency_ms": 11000, "sample_size": 20}
+        ))
+
+        # 8. DataImpulse Mobile
+        self.register(CapabilityMetadata(
+            provider_id="DI Mobile",
+            capability_id="DI Mobile",
+            enabled=True,
+            acquisition_method="browser",
+            proxy_type="Mobile",
+            country_capabilities=["US"],
+            browser_support=True,
+            estimated_cost=0.00065,
+            historical_metrics={"success_rate": 0.92, "validation_rate": 0.88, "avg_latency_ms": 14000, "sample_size": 15}
+        ))
+
+        # 9. Donut / Local CDP Browser
+        self.register(CapabilityMetadata(
+            provider_id="Donut Browser",
+            capability_id="Donut Browser",
+            enabled=True,
+            acquisition_method="browser",
+            proxy_type="None",
+            country_capabilities=["US", "IN"],
+            browser_support=True,
+            estimated_cost=0.0002,
+            historical_metrics={"success_rate": 0.95, "validation_rate": 0.90, "avg_latency_ms": 8000, "sample_size": 40}
+        ))

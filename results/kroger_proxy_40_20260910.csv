@@ -1,0 +1,161 @@
+test_id,proxy_provider,proxy_type,session_id,requested_zip,detected_zip,zip_status,zip_evidence,url,expected_upc,returned_upc,product_status,product_name,brand,price,regular_price,sale_price,currency,availability,inventory_count,acquisition_success,extraction_success,validation_success,final_status,failure_type,failure_message,elapsed_ms,bytes_downloaded,bytes_uploaded,total_bytes,total_gb,raw_response_path
+1,GeoNode,Residential,test-r01,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY,0003500051092,0003500051092,PRODUCT_UNVERIFIED,Colgate Baking Soda Toothpaste,Colgate,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5545,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/01_geonode_residential_30301.html
+2,GeoNode,Residential,test-r02,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY,0038371100458,0038371100458,PRODUCT_UNVERIFIED,Suave Daily Clarifying Shampoo,Suave,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",4887,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/02_geonode_residential_30301.html
+3,GeoNode,Residential,test-r03,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY,0007225003706,0007225003706,PRODUCT_UNVERIFIED,Nature's Own Honey Wheat Bread,Nature's Own,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",4991,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/03_geonode_residential_30303.html
+4,GeoNode,Residential,test-r04,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301,0001111089301,0001111089301,PRODUCT_UNVERIFIED,Kroger Salted Butter Sticks,Kroger,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301
+Call log:
+  - navigating to ""https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301"", waiting until ""domcontentloaded""
+",6073,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/04_geonode_residential_30303.html
+5,GeoNode,Residential,test-r05,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY,0087863900023,0087863900023,PRODUCT_UNVERIFIED,Every Man Jack Deodorant,Every Man Jack,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5076,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/05_geonode_residential_60601.html
+6,GeoNode,Residential,test-r06,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001,0081215403001,0081215403001,PRODUCT_UNVERIFIED,Native Deodorant,Native,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001
+Call log:
+  - navigating to ""https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001"", waiting until ""domcontentloaded""
+",5045,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/06_geonode_residential_60601.html
+7,GeoNode,Residential,test-r07,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240,0004116741240,0004116741240,PRODUCT_UNVERIFIED,Allegra 24hr Allergy Relief,Allegra,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240
+Call log:
+  - navigating to ""https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240"", waiting until ""domcontentloaded""
+",5111,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/07_geonode_residential_75201.html
+8,GeoNode,Residential,test-r08,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY,0004110080798,0004110080798,PRODUCT_UNVERIFIED,Claritin Liqui-Gels,Claritin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",4894,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/08_geonode_residential_75201.html
+9,GeoNode,Residential,test-r09,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451,0003077213451,0003077213451,PRODUCT_UNVERIFIED,Charmin Ultra Strong 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451"", waiting until ""domcontentloaded""
+",6040,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/09_geonode_residential_77001.html
+10,GeoNode,Residential,test-r10,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367,0003077219367,0003077219367,PRODUCT_UNVERIFIED,Charmin Ultra Soft 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367"", waiting until ""domcontentloaded""
+",5252,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/10_geonode_residential_77001.html
+11,DataImpulse,Residential,test-b01,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY,0003500051092,0003500051092,PRODUCT_UNVERIFIED,Colgate Baking Soda Toothpaste,Colgate,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5394,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/01_dataimpulse_residential_30301.html
+12,DataImpulse,Residential,test-b02,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY,0038371100458,0038371100458,PRODUCT_UNVERIFIED,Suave Daily Clarifying Shampoo,Suave,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5423,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/02_dataimpulse_residential_30301.html
+13,DataImpulse,Residential,test-b03,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY,0007225003706,0007225003706,PRODUCT_UNVERIFIED,Nature's Own Honey Wheat Bread,Nature's Own,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5334,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/03_dataimpulse_residential_30303.html
+14,DataImpulse,Residential,test-b04,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301,0001111089301,0001111089301,PRODUCT_UNVERIFIED,Kroger Salted Butter Sticks,Kroger,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301
+Call log:
+  - navigating to ""https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301"", waiting until ""domcontentloaded""
+",4735,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/04_dataimpulse_residential_30303.html
+15,DataImpulse,Residential,test-b05,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY,0087863900023,0087863900023,PRODUCT_UNVERIFIED,Every Man Jack Deodorant,Every Man Jack,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5157,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/05_dataimpulse_residential_60601.html
+16,DataImpulse,Residential,test-b06,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001,0081215403001,0081215403001,PRODUCT_UNVERIFIED,Native Deodorant,Native,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001
+Call log:
+  - navigating to ""https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001"", waiting until ""domcontentloaded""
+",4738,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/06_dataimpulse_residential_60601.html
+17,DataImpulse,Residential,test-b07,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240,0004116741240,0004116741240,PRODUCT_UNVERIFIED,Allegra 24hr Allergy Relief,Allegra,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240
+Call log:
+  - navigating to ""https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240"", waiting until ""domcontentloaded""
+",4913,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/07_dataimpulse_residential_75201.html
+18,DataImpulse,Residential,test-b08,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY,0004110080798,0004110080798,PRODUCT_UNVERIFIED,Claritin Liqui-Gels,Claritin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",4815,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/08_dataimpulse_residential_75201.html
+19,DataImpulse,Residential,test-b09,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451,0003077213451,0003077213451,PRODUCT_UNVERIFIED,Charmin Ultra Strong 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451"", waiting until ""domcontentloaded""
+",4907,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/09_dataimpulse_residential_77001.html
+20,DataImpulse,Residential,test-b10,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367,0003077219367,0003077219367,PRODUCT_UNVERIFIED,Charmin Ultra Soft 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367"", waiting until ""domcontentloaded""
+",5023,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/10_dataimpulse_residential_77001.html
+21,DataImpulse,Mobile,test-c01,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY,0003500051092,0003500051092,PRODUCT_UNVERIFIED,Colgate Baking Soda Toothpaste,Colgate,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5220,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/01_dataimpulse_mobile_30301.html
+22,DataImpulse,Mobile,test-c02,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY,0038371100458,0038371100458,PRODUCT_UNVERIFIED,Suave Daily Clarifying Shampoo,Suave,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5135,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/02_dataimpulse_mobile_30301.html
+23,DataImpulse,Mobile,test-c03,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY,0007225003706,0007225003706,PRODUCT_UNVERIFIED,Nature's Own Honey Wheat Bread,Nature's Own,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",4688,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/03_dataimpulse_mobile_30303.html
+24,DataImpulse,Mobile,test-c04,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301,0001111089301,0001111089301,PRODUCT_UNVERIFIED,Kroger Salted Butter Sticks,Kroger,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301
+Call log:
+  - navigating to ""https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301"", waiting until ""domcontentloaded""
+",5385,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/04_dataimpulse_mobile_30303.html
+25,DataImpulse,Mobile,test-c05,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY,0087863900023,0087863900023,PRODUCT_UNVERIFIED,Every Man Jack Deodorant,Every Man Jack,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5480,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/05_dataimpulse_mobile_60601.html
+26,DataImpulse,Mobile,test-c06,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001,0081215403001,0081215403001,PRODUCT_UNVERIFIED,Native Deodorant,Native,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001
+Call log:
+  - navigating to ""https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001"", waiting until ""domcontentloaded""
+",5391,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/06_dataimpulse_mobile_60601.html
+27,DataImpulse,Mobile,test-c07,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240,0004116741240,0004116741240,PRODUCT_UNVERIFIED,Allegra 24hr Allergy Relief,Allegra,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240
+Call log:
+  - navigating to ""https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240"", waiting until ""domcontentloaded""
+",4936,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/07_dataimpulse_mobile_75201.html
+28,DataImpulse,Mobile,test-c08,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY,0004110080798,0004110080798,PRODUCT_UNVERIFIED,Claritin Liqui-Gels,Claritin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",4751,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/08_dataimpulse_mobile_75201.html
+29,DataImpulse,Mobile,test-c09,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451,0003077213451,0003077213451,PRODUCT_UNVERIFIED,Charmin Ultra Strong 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451"", waiting until ""domcontentloaded""
+",7480,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/09_dataimpulse_mobile_77001.html
+30,DataImpulse,Mobile,test-c10,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367,0003077219367,0003077219367,PRODUCT_UNVERIFIED,Charmin Ultra Soft 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367"", waiting until ""domcontentloaded""
+",4967,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/10_dataimpulse_mobile_77001.html
+31,GeoNode,Datacenter,test-dc01,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY,0003500051092,0003500051092,PRODUCT_UNVERIFIED,Colgate Baking Soda Toothpaste,Colgate,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/colgate-baking-soda-and-peroxide-whitening-toothpaste-in-brisk-mint/0003500051092?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",8008,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/01_geonode_datacenter_30301.html
+32,GeoNode,Datacenter,test-dc02,30301,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY,0038371100458,0038371100458,PRODUCT_UNVERIFIED,Suave Daily Clarifying Shampoo,Suave,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/suave-essentials-daily-clarifying-shampoo-deep-cleansing-for-all-hair-types-22-5-fl-oz/0038371100458?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5251,0,621,621,5.783513188362122e-07,results/kroger_proxy_40_raw/02_geonode_datacenter_30301.html
+33,GeoNode,Datacenter,test-dc03,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY,0007225003706,0007225003706,PRODUCT_UNVERIFIED,Nature's Own Honey Wheat Bread,Nature's Own,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/nature-s-own-honey-wheat-bread-non-gmo-sandwich-bread-20-oz-loaf/0007225003706?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5261,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/03_geonode_datacenter_30303.html
+34,GeoNode,Datacenter,test-dc04,30303,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301,0001111089301,0001111089301,PRODUCT_UNVERIFIED,Kroger Salted Butter Sticks,Kroger,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301
+Call log:
+  - navigating to ""https://www.kroger.com/p/kroger-salted-butter-sticks/0001111089301"", waiting until ""domcontentloaded""
+",6806,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/04_geonode_datacenter_30303.html
+35,GeoNode,Datacenter,test-dc05,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY,0087863900023,0087863900023,PRODUCT_UNVERIFIED,Every Man Jack Deodorant,Every Man Jack,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/every-man-jack-men-s-sandalwood-teak-aluminum-free-deodorant/0087863900023?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",5644,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/05_geonode_datacenter_60601.html
+36,GeoNode,Datacenter,test-dc06,60601,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001,0081215403001,0081215403001,PRODUCT_UNVERIFIED,Native Deodorant,Native,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001
+Call log:
+  - navigating to ""https://www.kroger.com/p/native-coconut-vanilla-deodorant/0081215403001"", waiting until ""domcontentloaded""
+",6427,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/06_geonode_datacenter_60601.html
+37,GeoNode,Datacenter,test-dc07,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240,0004116741240,0004116741240,PRODUCT_UNVERIFIED,Allegra 24hr Allergy Relief,Allegra,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_NETWORK_CHANGED at https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240
+Call log:
+  - navigating to ""https://www.kroger.com/p/allegra-adult-24-hour-non-drowsy-allergy-relief-antihistamine-tablets-with-180-mg-fexofenadine-hci/0004116741240"", waiting until ""domcontentloaded""
+",6606,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/07_geonode_datacenter_75201.html
+38,GeoNode,Datacenter,test-dc08,75201,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY,0004110080798,0004110080798,PRODUCT_UNVERIFIED,Claritin Liqui-Gels,Claritin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_PROXY_CONNECTION_FAILED at https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY
+Call log:
+  - navigating to ""https://www.kroger.com/p/claritin-liqui-gels-24-hour-non-drowsy-allergy-relief-capsules-loratadine-10mg/0004110080798?fulfillment=DELIVERY"", waiting until ""domcontentloaded""
+",3243,0,614,614,5.718320608139038e-07,results/kroger_proxy_40_raw/08_geonode_datacenter_75201.html
+39,GeoNode,Datacenter,test-dc09,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451,0003077213451,0003077213451,PRODUCT_UNVERIFIED,Charmin Ultra Strong 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-strong-toilet-paper-12-mega-xl-rolls/0003077213451"", waiting until ""domcontentloaded""
+",5893,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/09_geonode_datacenter_77001.html
+40,GeoNode,Datacenter,test-dc10,77001,N/A,ZIP_UNVERIFIED,None,https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367,0003077219367,0003077219367,PRODUCT_UNVERIFIED,Charmin Ultra Soft 12 Mega XL,Charmin,,,,,,,False,False,False,PROVIDER_ERROR,PROVIDER_ERROR,"Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367
+Call log:
+  - navigating to ""https://www.kroger.com/p/charmin-ultra-soft-toilet-paper-12-mega-xl-rolls/0003077219367"", waiting until ""domcontentloaded""
+",5834,0,615,615,5.727633833885193e-07,results/kroger_proxy_40_raw/10_geonode_datacenter_77001.html

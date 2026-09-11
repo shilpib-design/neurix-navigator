@@ -1,0 +1,5 @@
+test_id,provider,proxy_type,session_id,success,ready_status,exit_ip,country,region,city,isp,org,http_status,latency_ms,error_type,error_message
+1,GeoNode,Residential,gn-res-test-01,True,READY,98.148.130.203,United States,California,Rialto,Charter Communications,Spectrum,200,7472,,
+2,DataImpulse,Residential,di-res-test-01,True,READY,104.56.26.118,United States,Alabama,Mobile,"AT&T Enterprises, LLC",AT&T Corp,200,1532,,
+3,DataImpulse,Mobile,di-mob-test-01,True,READY,172.58.149.85,United States,Tennessee,Berry Hill,"T-Mobile USA, Inc.",T-Mobile USA,200,1423,,
+4,GeoNode,Datacenter,gn-dc-test-01,True,READY,98.148.130.203,United States,California,Rialto,Charter Communications,Spectrum,200,1048,,

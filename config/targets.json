@@ -1,0 +1,20 @@
+{
+  "targets": [
+    {
+      "name": "flipkart",
+      "url": "https://www.flipkart.com/panasonic-h-hsa35100e-telephoto-zoom-lens/p/itmffgx6p6c2wgda",
+      "geo": "IN"
+    },
+    {
+      "name": "amazon_india",
+      "url": "https://www.amazon.in/dp/B078Y2PJL4",
+      "geo": "IN"
+    },
+    {
+      "name": "kroger",
+      "url": "https://www.kroger.com/p/snickers-singles-1-86-ounces-each/0004000042431?fulfillment=DELIVERY",
+      "geo": "US",
+      "zipcode": "30301"
+    }
+  ]
+}
