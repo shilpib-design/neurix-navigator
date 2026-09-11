@@ -28,7 +28,10 @@ class LearningEngine:
         latency_ms: int,
         bytes_count: int,
         estimated_cost: float,
-        failure_category: Optional[str] = None
+        failure_category: Optional[str] = None,
+        url_pattern: Optional[str] = None,
+        target_type: Optional[str] = None,
+        customer_profile: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         obs = {
             "timestamp": time.time(),
@@ -40,7 +43,10 @@ class LearningEngine:
             "latency_ms": latency_ms,
             "bytes": bytes_count,
             "estimated_cost": estimated_cost,
-            "failure_category": failure_category
+            "failure_category": failure_category,
+            "url_pattern": url_pattern,
+            "target_type": target_type,
+            "customer_profile": customer_profile or {}
         }
         self._observations.append(obs)
 

@@ -21,23 +21,28 @@ class CandidateGenerator:
         candidates = []
 
         for cap in all_caps:
-            # 1. Health state filter
-            if cap.current_health in [HealthState.FAILED, HealthState.DISABLED]:
-                continue
-
-            # 2. Country capability filter
-            if profile.inferred_country and profile.inferred_country not in cap.country_capabilities:
-                continue
-
-            # 3. Target type capability filter
-            if profile.target_type not in cap.target_capabilities and "generic" not in cap.target_capabilities:
-                continue
-
-            # 4. Latency preference filter (soft constraint)
-            avg_lat = cap.historical_metrics.get("avg_latency_ms", 3000)
-            if preferences.max_latency_ms and avg_lat > preferences.max_latency_ms * 1.5:
-                continue
-
-            candidates.append(cap)
+            if self.is_compatible(cap, profile, preferences):
+                candidates.append(cap)
 
         return candidates
+
+    @staticmethod
+    def is_compatible(
+        capability: CapabilityMetadata,
+        profile: TargetProfile,
+        preferences: CustomerPreferences
+    ) -> bool:
+        if not capability.enabled or capability.current_health in [HealthState.FAILED, HealthState.DISABLED]:
+            return False
+        if (
+            profile.inferred_country
+            and profile.inferred_country != "Unknown"
+            and profile.inferred_country not in capability.country_capabilities
+        ):
+            return False
+        if profile.target_type not in capability.target_capabilities and "generic" not in capability.target_capabilities:
+            return False
+        if profile.location_sensitivity and not capability.location_capabilities:
+            return False
+        avg_lat = capability.historical_metrics.get("avg_latency_ms", 3000)
+        return not preferences.max_latency_ms or avg_lat <= preferences.max_latency_ms * 1.5

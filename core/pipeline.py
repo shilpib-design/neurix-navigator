@@ -24,6 +24,7 @@ from core.learning import LearningEngine
 from core.policy import PolicyEngine
 from core.meter import CustomerUsageMeter
 from core.storage import LeanStorageManager
+from core.exploration import ExplorationBudget, ExplorationDecision, ExplorationPlanner
 
 from orchestrator.models import AcquisitionRequest as ArchReq, AcquisitionResult
 from orchestrator.orchestrator import TargetExtractorRegistry, TargetValidator
@@ -51,9 +52,32 @@ class UnifiedPipeline:
         self.policy_engine = PolicyEngine()
         self.usage_meter = CustomerUsageMeter()
         self.storage_manager = LeanStorageManager()
+        self.exploration_planner = ExplorationPlanner()
 
         self.extractor_registry = extractor_registry or TargetExtractorRegistry()
         self.validator = validator or TargetValidator()
+
+    def plan_exploration(
+        self,
+        request: AcquisitionRequest,
+        max_attempts: Optional[int] = None,
+        attempts_consumed: int = 0,
+    ) -> List[ExplorationDecision]:
+        """Plan exploration without executing providers or consuming vendor credits."""
+        profile = TargetIntelligence.analyze(request)
+        candidates = self.candidate_generator.generate_candidates(
+            profile, request.customer_preferences
+        )
+        budget = ExplorationBudget(
+            max_attempts=(
+                self.exploration_planner.default_max_attempts
+                if max_attempts is None else max_attempts
+            ),
+            attempts_consumed=attempts_consumed,
+        )
+        return self.exploration_planner.plan(
+            candidates, profile, request.customer_preferences, budget
+        )
 
     def process_request(self, request: AcquisitionRequest) -> Dict[str, Any]:
         pipeline_start = time.time()
@@ -66,7 +90,13 @@ class UnifiedPipeline:
 
         # 3. Decision Engine & Cascade Evaluation
         active_policy = self.policy_engine.get_active_policy(profile)
-        if active_policy and not request.parameters.get("force_reoptimize"):
+        candidate_ids = {candidate.capability_id for candidate in candidates}
+        policy_is_compatible = (
+            active_policy
+            and active_policy.selected_cascade
+            and set(active_policy.selected_cascade).issubset(candidate_ids)
+        )
+        if policy_is_compatible and not request.parameters.get("force_reoptimize"):
             # Use active policy cascade
             selected_cascade_ids = active_policy.selected_cascade
             selected_cascade = [self.registry.get(cid) for cid in selected_cascade_ids if self.registry.get(cid)]
@@ -89,9 +119,12 @@ class UnifiedPipeline:
         final_html = ""
         total_cost = 0.0
         remaining_cascade = list(selected_cascade)
+        cascade_id = request.request_id
+        attempt_index = 0
 
         while remaining_cascade and not final_validated:
             current_cap = remaining_cascade[0]
+            attempt_index += 1
             att_start = time.time()
 
             # Execute attempt via provider adapter or mock strategy
@@ -124,7 +157,9 @@ class UnifiedPipeline:
             # Failure Category Classification
             fail_cat = None
             if not is_validated:
-                if "429" in str(acq_res.get("error", "")):
+                if acq_res.get("failure_category"):
+                    fail_cat = acq_res["failure_category"]
+                elif "429" in str(acq_res.get("error", "")):
                     fail_cat = FailureCategory.RATE_LIMIT.value
                 elif "timeout" in str(acq_res.get("error", "")).lower():
                     fail_cat = FailureCategory.TIMEOUT.value
@@ -137,11 +172,16 @@ class UnifiedPipeline:
             att_record = {
                 "capability_id": current_cap.capability_id,
                 "provider_id": current_cap.provider_id,
+                "request_id": request.request_id,
+                "cascade_id": cascade_id,
+                "attempt_index": attempt_index,
                 "success": acq_res.get("success", False),
                 "validated": is_validated,
+                "status_code": acq_res.get("status_code"),
                 "elapsed_ms": elapsed_ms,
                 "bytes": bytes_count,
                 "cost": cost_attempt,
+                "error": acq_res.get("error"),
                 "failure_category": fail_cat
             }
             attempts.append(att_record)
@@ -156,7 +196,10 @@ class UnifiedPipeline:
                 latency_ms=elapsed_ms,
                 bytes_count=bytes_count,
                 estimated_cost=cost_attempt,
-                failure_category=fail_cat
+                failure_category=fail_cat,
+                url_pattern=profile.url_pattern,
+                target_type=profile.target_type,
+                customer_profile=request.customer_preferences.to_dict()
             )
 
             # 6. Raw Data TTL Metadata Storage (Suppresses permanent raw HTML by default)
@@ -170,12 +213,32 @@ class UnifiedPipeline:
             else:
                 # 7. Failure-Aware Fallback Cascade Adjustment
                 remaining_cascade = self.fallback_manager.adjust_cascade_on_failure(
-                    remaining_cascade, current_cap, fail_cat or "VALIDATION_FAILED"
+                    remaining_cascade,
+                    current_cap,
+                    fail_cat or "VALIDATION_FAILED",
+                    candidate_pool=candidates,
+                    profile=profile,
+                    preferences=request.customer_preferences
                 )
 
         # 8. Policy Evaluation & Instant Real-Time Promotion Check
         executed_cascade_ids = [a["capability_id"] for a in attempts]
-        sample_size = current_cap.historical_metrics.get("sample_size", 1) if selected_cascade else 1
+        sample_size = max(
+            (self.registry.get(a["capability_id"]).historical_metrics.get("sample_size", 1)
+             for a in attempts if self.registry.get(a["capability_id"])),
+            default=1
+        )
+        if attempts:
+            validated_attempts = sum(1 for attempt in attempts if attempt["validated"])
+            eval_metrics = {
+                **eval_metrics,
+                "expected_validation": validated_attempts / len(attempts),
+                "expected_latency": sum(a["elapsed_ms"] for a in attempts) / len(attempts),
+                "expected_cost": total_cost,
+                "cost_per_validated": (
+                    total_cost / validated_attempts if validated_attempts else float("inf")
+                )
+            }
         promoted, current_policy_state = self.policy_engine.evaluate_and_promote(
             profile, executed_cascade_ids, eval_metrics, sample_size=sample_size
         )
@@ -211,11 +274,12 @@ class UnifiedPipeline:
 
     def _execute_capability(self, cap: CapabilityMetadata, request: AcquisitionRequest, profile: TargetProfile) -> Dict[str, Any]:
         """
-        Executes capability using registered adapter or internal stub.
+        Executes capability using its registered adapter.
         """
-        if cap.adapter:
+        adapter = self.registry.resolve_adapter(cap.capability_id)
+        if adapter:
             try:
-                res = cap.adapter.fetch({"name": f"{profile.domain} Product", "url": request.url})
+                res = adapter.fetch({"name": f"{profile.domain} Product", "url": request.url})
                 raw_b = res.get("raw_content") or b""
                 html_text = raw_b.decode("utf-8", errors="ignore") if raw_b else ""
                 status_code = res.get("status_code", 200)
@@ -224,15 +288,22 @@ class UnifiedPipeline:
                     "success": success,
                     "status_code": status_code,
                     "html": html_text,
-                    "error": res.get("error_message")
+                    "error": res.get("error_message"),
+                    "failure_category": None if success else FailureCategory.PROVIDER_ERROR.value
                 }
             except Exception as e:
-                return {"success": False, "status_code": 500, "html": "", "error": str(e)}
+                return {
+                    "success": False,
+                    "status_code": 500,
+                    "html": "",
+                    "error": str(e),
+                    "failure_category": FailureCategory.PROVIDER_ERROR.value
+                }
 
-        # Default fallback stub if cap.adapter is None
         return {
-            "success": True,
-            "status_code": 200,
-            "html": f"<html><body><h1>{profile.domain} Product</h1><div id='price'>$19.99</div><div id='availability'>InStock</div></body></html>",
-            "error": None
+            "success": False,
+            "status_code": 500,
+            "html": "",
+            "error": "Unbound capability: no adapter registered",
+            "failure_category": FailureCategory.PROVIDER_ERROR.value
         }
