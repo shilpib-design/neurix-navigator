@@ -25,6 +25,7 @@ from core.policy import PolicyEngine
 from core.meter import CustomerUsageMeter
 from core.storage import LeanStorageManager
 from core.exploration import ExplorationBudget, ExplorationDecision, ExplorationPlanner
+from core.exploration_executor import ExplorationExecutor, ControlledExplorationResult
 
 from orchestrator.models import AcquisitionRequest as ArchReq, AcquisitionResult
 from orchestrator.orchestrator import TargetExtractorRegistry, TargetValidator
@@ -57,6 +58,17 @@ class UnifiedPipeline:
         self.extractor_registry = extractor_registry or TargetExtractorRegistry()
         self.validator = validator or TargetValidator()
 
+        self.exploration_executor = ExplorationExecutor(
+            registry=self.registry,
+            rate_card_registry=self.rate_card_registry,
+            extractor_registry=self.extractor_registry,
+            validator=self.validator,
+            learning_engine=self.learning_engine,
+            policy_engine=self.policy_engine,
+            storage_manager=self.storage_manager,
+            exploration_planner=self.exploration_planner
+        )
+
     def plan_exploration(
         self,
         request: AcquisitionRequest,
@@ -78,6 +90,14 @@ class UnifiedPipeline:
         return self.exploration_planner.plan(
             candidates, profile, request.customer_preferences, budget
         )
+
+    def execute_exploration(
+        self,
+        request: AcquisitionRequest,
+        budget: Optional[ExplorationBudget] = None
+    ) -> ControlledExplorationResult:
+        """Executes bounded capability exploration attempts safely and records structured observations."""
+        return self.exploration_executor.execute_exploration(request, budget)
 
     def process_request(self, request: AcquisitionRequest) -> Dict[str, Any]:
         pipeline_start = time.time()
