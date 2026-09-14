@@ -31,7 +31,8 @@ class LearningEngine:
         failure_category: Optional[str] = None,
         url_pattern: Optional[str] = None,
         target_type: Optional[str] = None,
-        customer_profile: Optional[Dict[str, Any]] = None
+        customer_profile: Optional[Dict[str, Any]] = None,
+        discovery_evidence: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         obs = {
             "timestamp": time.time(),
@@ -46,7 +47,8 @@ class LearningEngine:
             "failure_category": failure_category,
             "url_pattern": url_pattern,
             "target_type": target_type,
-            "customer_profile": customer_profile or {}
+            "customer_profile": customer_profile or {},
+            "discovery_evidence": discovery_evidence or {}
         }
         self._observations.append(obs)
 

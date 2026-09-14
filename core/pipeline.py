@@ -24,6 +24,7 @@ from core.learning import LearningEngine
 from core.policy import PolicyEngine
 from core.meter import CustomerUsageMeter
 from core.storage import LeanStorageManager
+from core.discovery import DiscoveryEngine, DiscoveryRequest, DiscoveryResult
 from core.exploration import ExplorationBudget, ExplorationDecision, ExplorationPlanner
 from core.exploration_executor import ExplorationExecutor, ControlledExplorationResult
 
@@ -42,6 +43,7 @@ class UnifiedPipeline:
         rate_card_registry: Optional[RateCardRegistry] = None,
         extractor_registry: Optional[TargetExtractorRegistry] = None,
         validator: Optional[TargetValidator] = None,
+        discovery_engine: Optional[DiscoveryEngine] = None,
         exploration_rate: float = 0.10
     ):
         self.registry = registry or ProviderRegistry()
@@ -54,6 +56,7 @@ class UnifiedPipeline:
         self.usage_meter = CustomerUsageMeter()
         self.storage_manager = LeanStorageManager()
         self.exploration_planner = ExplorationPlanner()
+        self.discovery_engine = discovery_engine or DiscoveryEngine()
 
         self.extractor_registry = extractor_registry or TargetExtractorRegistry()
         self.validator = validator or TargetValidator()
@@ -68,6 +71,26 @@ class UnifiedPipeline:
             storage_manager=self.storage_manager,
             exploration_planner=self.exploration_planner
         )
+
+    def discover_surfaces(
+        self,
+        request: AcquisitionRequest,
+        observed_response: Optional[Dict[str, Any]] = None
+    ) -> DiscoveryResult:
+        """
+        In-memory surface discovery helper that operates safely on observed response data.
+        Does not initiate network, browser, or vendor requests.
+        """
+        resp = observed_response or {}
+        disc_req = DiscoveryRequest(
+            url=request.url,
+            target=request.parameters.get("target"),
+            headers=resp.get("headers", {}),
+            status_code=resp.get("status_code"),
+            body=resp.get("html", "") or resp.get("body", ""),
+            context={"request_id": request.request_id}
+        )
+        return self.discovery_engine.discover(disc_req)
 
     def plan_exploration(
         self,
@@ -141,6 +164,7 @@ class UnifiedPipeline:
         remaining_cascade = list(selected_cascade)
         cascade_id = request.request_id
         attempt_index = 0
+        latest_discovery = None
 
         while remaining_cascade and not final_validated:
             current_cap = remaining_cascade[0]
@@ -154,6 +178,10 @@ class UnifiedPipeline:
             # Extract & Validate
             html_content = acq_res.get("html", "")
             bytes_count = len(html_content.encode("utf-8")) if html_content else 0
+
+            # Run Discovery Engine on observed attempt response
+            discovery_res = self.discover_surfaces(request, acq_res)
+            latest_discovery = discovery_res.to_dict()
 
             extracted_data = {}
             extractor_fn = self.extractor_registry.get(profile.domain)
@@ -202,7 +230,8 @@ class UnifiedPipeline:
                 "bytes": bytes_count,
                 "cost": cost_attempt,
                 "error": acq_res.get("error"),
-                "failure_category": fail_cat
+                "failure_category": fail_cat,
+                "discovery": latest_discovery
             }
             attempts.append(att_record)
 
@@ -219,7 +248,8 @@ class UnifiedPipeline:
                 failure_category=fail_cat,
                 url_pattern=profile.url_pattern,
                 target_type=profile.target_type,
-                customer_profile=request.customer_preferences.to_dict()
+                customer_profile=request.customer_preferences.to_dict(),
+                discovery_evidence=latest_discovery
             )
 
             # 6. Raw Data TTL Metadata Storage (Suppresses permanent raw HTML by default)
@@ -289,7 +319,8 @@ class UnifiedPipeline:
             "billing": billing_record.to_dict(),
             "policy": current_policy_state.to_dict(),
             "policy_promoted": promoted,
-            "is_exploration": is_exploration
+            "is_exploration": is_exploration,
+            "discovery": latest_discovery or {}
         }
 
     def _execute_capability(self, cap: CapabilityMetadata, request: AcquisitionRequest, profile: TargetProfile) -> Dict[str, Any]:
