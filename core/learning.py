@@ -6,16 +6,24 @@ Updates capability statistics in real-time after every attempt.
 import time
 from typing import Dict, Any, List, Optional
 from core.registry import ProviderRegistry
+from core.degradation import DegradationDetector, DegradationEvent, ReinvestigationSignal
 
 
 class LearningEngine:
     """
     Processes attempt observations and updates recency-weighted provider metrics.
+    Monitors performance degradation using DegradationDetector.
     """
 
-    def __init__(self, registry: ProviderRegistry, alpha: float = 0.20):
+    def __init__(
+        self,
+        registry: ProviderRegistry,
+        alpha: float = 0.20,
+        degradation_detector: Optional[DegradationDetector] = None
+    ):
         self.registry = registry
         self.alpha = alpha  # Recency weighting factor (0.20 = 20% weight to newest observation)
+        self.degradation_detector = degradation_detector or DegradationDetector()
         self._observations: List[Dict[str, Any]] = []
 
     def record_observation(
@@ -74,6 +82,11 @@ class LearningEngine:
 
             # Update health state machine
             self.registry.update_health(capability_id, success, failure_category)
+
+        # Check for degradation signals
+        events, signals = self.degradation_detector.record_observation(obs)
+        obs["degradation_events"] = [e.to_dict() for e in events]
+        obs["reinvestigation_signals"] = [s.to_dict() for s in signals]
 
         return obs
 

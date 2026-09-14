@@ -313,6 +313,9 @@ class UnifiedPipeline:
         )
         self.storage_manager.store_billing_record(billing_record)
 
+        events = [e.to_dict() for e in self.learning_engine.degradation_detector.get_events()]
+        signals = [s.to_dict() for s in self.learning_engine.degradation_detector.get_signals()]
+
         return {
             "request_id": request.request_id,
             "target_profile": profile.to_dict(),
@@ -328,7 +331,9 @@ class UnifiedPipeline:
             "policy_promoted": promoted,
             "is_exploration": is_exploration,
             "discovery": latest_discovery or {},
-            "routing_decision": routing_decision.to_dict()
+            "routing_decision": routing_decision.to_dict(),
+            "degradation_events": events,
+            "reinvestigation_signals": signals
         }
 
     def _execute_capability(self, cap: CapabilityMetadata, request: AcquisitionRequest, profile: TargetProfile) -> Dict[str, Any]:
