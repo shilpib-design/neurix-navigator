@@ -120,6 +120,16 @@ class RateCardRegistry:
             base_rate=0.0012
         ))
         self.register(ProviderRateCard(
+            provider_id="PureHTTP",
+            capability_id="pure_http",
+            base_rate=0.0001
+        ))
+        self.register(ProviderRateCard(
+            provider_id="PureHTTP",
+            capability_id="PureHTTP",
+            base_rate=0.0001
+        ))
+        self.register(ProviderRateCard(
             provider_id="Donut Browser",
             capability_id="Donut Browser",
             base_rate=0.0002
