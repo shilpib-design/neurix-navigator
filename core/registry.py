@@ -203,14 +203,27 @@ class ProviderRegistry:
             historical_metrics={"success_rate": 0.95, "validation_rate": 0.90, "avg_latency_ms": 8000, "sample_size": 40}
         ))
 
+        # 10. Pure HTTP Acquisition
+        self.register(CapabilityMetadata(
+            provider_id="PureHTTP",
+            capability_id="pure_http",
+            enabled=True,
+            acquisition_method="http",
+            country_capabilities=["US", "IN", "GB", "CA", "DE", "FR", "AU", "SG"],
+            target_capabilities=["pdp", "search", "category", "cart", "checkout", "homepage", "generic"],
+            estimated_cost=0.0001,
+            historical_metrics={"success_rate": 0.90, "validation_rate": 0.85, "avg_latency_ms": 500, "sample_size": 20}
+        ))
+
         self.bind_adapter("Context.dev", self._load_adapter("Context.dev"))
         self.bind_adapter("String", self._load_adapter("String"))
         self.bind_adapter("Scrapfly", self._load_adapter("Scrapfly"))
+        self.bind_adapter("pure_http", self._load_adapter("pure_http"))
 
-        # Browser/proxy capabilities remain registered for lifecycle and future
-        # integration, but are not part of Stage 2A default routing.
+        # Browser/proxy capabilities and pure_http remain registered for lifecycle and future
+        # integration, but are disabled by default per Stage 2A active provider specification.
         for capability_id in (
-            "GeoNode Res", "GeoNode DC", "DI Res", "DI Mobile", "Donut Browser"
+            "GeoNode Res", "GeoNode DC", "DI Res", "DI Mobile", "Donut Browser", "pure_http"
         ):
             self.set_enabled(capability_id, False)
 
@@ -220,6 +233,8 @@ class ProviderRegistry:
             "Context.dev": ("providers.context_dev_adapter", "ContextDevProvider"),
             "String": ("providers.string_adapter", "StringProvider"),
             "Scrapfly": ("providers.scrapfly_adapter", "ScrapflyProvider"),
+            "pure_http": ("providers.pure_http_adapter", "PureHttpProvider"),
+            "PureHTTP": ("providers.pure_http_adapter", "PureHttpProvider"),
         }
         module_name, class_name = adapter_types[provider_id]
         module = __import__(module_name, fromlist=[class_name])
