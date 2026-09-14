@@ -25,6 +25,7 @@ from core.policy import PolicyEngine
 from core.meter import CustomerUsageMeter
 from core.storage import LeanStorageManager
 from core.discovery import DiscoveryEngine, DiscoveryRequest, DiscoveryResult
+from core.economic_routing import EconomicRouter, EconomicRoutingDecision, CandidateEconomicProfile
 from core.exploration import ExplorationBudget, ExplorationDecision, ExplorationPlanner
 from core.exploration_executor import ExplorationExecutor, ControlledExplorationResult
 
@@ -44,12 +45,14 @@ class UnifiedPipeline:
         extractor_registry: Optional[TargetExtractorRegistry] = None,
         validator: Optional[TargetValidator] = None,
         discovery_engine: Optional[DiscoveryEngine] = None,
+        economic_router: Optional[EconomicRouter] = None,
         exploration_rate: float = 0.10
     ):
         self.registry = registry or ProviderRegistry()
         self.rate_card_registry = rate_card_registry or RateCardRegistry()
         self.candidate_generator = CandidateGenerator(self.registry)
         self.optimizer = EconomicOptimizer(self.rate_card_registry, exploration_rate=exploration_rate)
+        self.economic_router = economic_router or EconomicRouter(self.rate_card_registry)
         self.fallback_manager = FallbackManager(self.registry)
         self.learning_engine = LearningEngine(self.registry)
         self.policy_engine = PolicyEngine()
@@ -131,7 +134,11 @@ class UnifiedPipeline:
         # 2. Candidate Generation
         candidates = self.candidate_generator.generate_candidates(profile, request.customer_preferences)
 
-        # 3. Decision Engine & Cascade Evaluation
+        # 3. Decision Engine & Economic Routing Evaluation
+        routing_decision = self.economic_router.route(
+            candidates, profile, request.customer_preferences, discovery_result=None, session_available=False
+        )
+
         active_policy = self.policy_engine.get_active_policy(profile)
         candidate_ids = {candidate.capability_id for candidate in candidates}
         policy_is_compatible = (
@@ -320,7 +327,8 @@ class UnifiedPipeline:
             "policy": current_policy_state.to_dict(),
             "policy_promoted": promoted,
             "is_exploration": is_exploration,
-            "discovery": latest_discovery or {}
+            "discovery": latest_discovery or {},
+            "routing_decision": routing_decision.to_dict()
         }
 
     def _execute_capability(self, cap: CapabilityMetadata, request: AcquisitionRequest, profile: TargetProfile) -> Dict[str, Any]:
