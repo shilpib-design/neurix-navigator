@@ -89,7 +89,6 @@ class ExplorationPlanner:
             )
             for index, (priority, capability_id, reason) in enumerate(selected)
         ]
-        budget.consume(len(decisions))
         return decisions
 
     def select_capabilities(
