@@ -4,10 +4,12 @@ from .scrapfly_adapter import ScrapflyProvider
 from .alterlab_adapter import AlterLabProvider
 from .context_dev_adapter import ContextDevProvider
 from .pure_http_adapter import PureHttpProvider
+from .session_assisted_http_adapter import SessionAssistedHttpProvider
 
 def get_all_providers():
     return [
         PureHttpProvider(),
+        SessionAssistedHttpProvider(),
         StringProvider(),
         ScrapflyProvider(),
         AlterLabProvider(),
@@ -17,6 +19,7 @@ def get_all_providers():
 __all__ = [
     "BaseProvider",
     "PureHttpProvider",
+    "SessionAssistedHttpProvider",
     "StringProvider",
     "ScrapflyProvider",
     "AlterLabProvider",

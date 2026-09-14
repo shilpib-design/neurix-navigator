@@ -24,6 +24,7 @@ class SessionBundle:
     status: str = "healthy"  # "healthy", "unhealthy", "expired"
     reuse_count: int = 0
     last_validation: Optional[float] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def is_expired(self, current_time: Optional[float] = None) -> bool:
         now = current_time if current_time is not None else time.time()
@@ -47,7 +48,8 @@ class SessionBundle:
             "expires_at": self.expires_at,
             "status": self.status,
             "reuse_count": self.reuse_count,
-            "last_validation": self.last_validation
+            "last_validation": self.last_validation,
+            "metadata": dict(self.metadata)
         }
 
 
@@ -70,7 +72,8 @@ class SessionManager:
         cookies: Optional[Dict[str, str]] = None,
         headers: Optional[Dict[str, str]] = None,
         ttl_seconds: Optional[float] = None,
-        session_id: Optional[str] = None
+        session_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
     ) -> SessionBundle:
         sid = session_id or f"sess_{uuid.uuid4().hex[:12]}"
         now = time.time()
@@ -90,7 +93,8 @@ class SessionManager:
             expires_at=expires_at,
             status="healthy",
             reuse_count=0,
-            last_validation=now
+            last_validation=now,
+            metadata=dict(metadata) if metadata else {}
         )
         self._sessions[sid] = bundle
         return bundle
@@ -185,3 +189,44 @@ class SessionManager:
                 if b.domain.lower() == domain.lower()
             ]
         return list(self._sessions.values())
+
+
+class SessionPool(SessionManager):
+    """
+    Session Pool managing active/warmed session bundles, compatibility matching, and pool queries.
+    Inherits lifecycle management from SessionManager.
+    """
+
+    def add_session(self, bundle: SessionBundle) -> None:
+        """Add a warmed or existing session bundle to the pool."""
+        self._sessions[bundle.session_id] = bundle
+
+    def get_compatible_session(
+        self,
+        domain: str,
+        country: Optional[str] = None,
+        target: Optional[str] = None
+    ) -> Optional[SessionBundle]:
+        """
+        Finds a compatible healthy, non-expired session matching domain, country, and target type.
+        """
+        now = time.time()
+        eligible = []
+
+        for bundle in self._sessions.values():
+            if bundle.status != "healthy" or bundle.is_expired(now):
+                continue
+            if bundle.domain.lower() != domain.lower():
+                continue
+            if country and country.upper() != "UNKNOWN" and bundle.country.upper() not in (country.upper(), "ANY"):
+                continue
+            if target and target.lower() not in ("unknown", "generic") and bundle.target.lower() not in (target.lower(), "generic", "all"):
+                continue
+            eligible.append(bundle)
+
+        if not eligible:
+            return None
+
+        # Sort by last_validation descending (most recently validated first)
+        eligible.sort(key=lambda b: (-(b.last_validation or 0), b.reuse_count))
+        return eligible[0]

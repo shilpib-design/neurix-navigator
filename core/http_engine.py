@@ -26,6 +26,10 @@ class HttpAcquisitionResponse:
     error: Optional[str]
     failure_category: Optional[str]
     session_id: Optional[str] = None
+    session_assisted: bool = False
+    session_reused: bool = False
+    session_invalidated: bool = False
+    session_reuse_count: int = 0
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -38,7 +42,11 @@ class HttpAcquisitionResponse:
             "success": self.success,
             "error": self.error,
             "failure_category": self.failure_category,
-            "session_id": self.session_id
+            "session_id": self.session_id,
+            "session_assisted": self.session_assisted,
+            "session_reused": self.session_reused,
+            "session_invalidated": self.session_invalidated,
+            "session_reuse_count": self.session_reuse_count
         }
 
 
@@ -195,11 +203,18 @@ class PureHttpEngine:
         req_headers = dict(headers) if headers else {}
         req_cookies = dict(cookies) if cookies else {}
         bound_session: Optional[SessionBundle] = None
+        session_assisted = False
+        session_reused = False
+        session_invalidated = False
+        session_reuse_count = 0
 
         # 1. Session Binding & Inheritance
         if session_id:
             bound_session = self.session_manager.get_session(session_id)
             if bound_session:
+                session_assisted = True
+                session_reused = bool(bound_session.reuse_count > 0)
+                session_reuse_count = bound_session.reuse_count + 1
                 self.session_manager.increment_reuse_count(session_id)
                 # Merge session cookies and headers
                 for k, v in bound_session.cookies.items():
@@ -257,8 +272,10 @@ class PureHttpEngine:
                 self.session_manager.update_session(active_sid, cookies=res_cookies)
             if success:
                 self.session_manager.mark_healthy(active_sid)
+                session_invalidated = False
             else:
                 self.session_manager.mark_unhealthy(active_sid)
+                session_invalidated = True
 
         return HttpAcquisitionResponse(
             url=url,
@@ -272,5 +289,9 @@ class PureHttpEngine:
             success=success,
             error=err_msg or (None if success else f"HTTP status {status_code}"),
             failure_category=failure_category,
-            session_id=active_sid
+            session_id=active_sid,
+            session_assisted=session_assisted,
+            session_reused=session_reused,
+            session_invalidated=session_invalidated,
+            session_reuse_count=session_reuse_count
         )

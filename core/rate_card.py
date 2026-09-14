@@ -130,6 +130,16 @@ class RateCardRegistry:
             base_rate=0.0001
         ))
         self.register(ProviderRateCard(
+            provider_id="SessionAssistedHTTP",
+            capability_id="session_assisted_http",
+            base_rate=0.00015
+        ))
+        self.register(ProviderRateCard(
+            provider_id="SessionAssistedHTTP",
+            capability_id="SessionAssistedHTTP",
+            base_rate=0.00015
+        ))
+        self.register(ProviderRateCard(
             provider_id="Donut Browser",
             capability_id="Donut Browser",
             base_rate=0.0002

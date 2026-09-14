@@ -215,15 +215,28 @@ class ProviderRegistry:
             historical_metrics={"success_rate": 0.90, "validation_rate": 0.85, "avg_latency_ms": 500, "sample_size": 20}
         ))
 
+        # 11. Session-Assisted HTTP Acquisition
+        self.register(CapabilityMetadata(
+            provider_id="SessionAssistedHTTP",
+            capability_id="session_assisted_http",
+            enabled=True,
+            acquisition_method="session_http",
+            country_capabilities=["US", "IN", "GB", "CA", "DE", "FR", "AU", "SG"],
+            target_capabilities=["pdp", "search", "category", "cart", "checkout", "homepage", "generic"],
+            estimated_cost=0.00015,
+            historical_metrics={"success_rate": 0.92, "validation_rate": 0.88, "avg_latency_ms": 550, "sample_size": 15}
+        ))
+
         self.bind_adapter("Context.dev", self._load_adapter("Context.dev"))
         self.bind_adapter("String", self._load_adapter("String"))
         self.bind_adapter("Scrapfly", self._load_adapter("Scrapfly"))
         self.bind_adapter("pure_http", self._load_adapter("pure_http"))
+        self.bind_adapter("session_assisted_http", self._load_adapter("session_assisted_http"))
 
-        # Browser/proxy capabilities and pure_http remain registered for lifecycle and future
+        # Browser/proxy capabilities, pure_http, and session_assisted_http remain registered for lifecycle and future
         # integration, but are disabled by default per Stage 2A active provider specification.
         for capability_id in (
-            "GeoNode Res", "GeoNode DC", "DI Res", "DI Mobile", "Donut Browser", "pure_http"
+            "GeoNode Res", "GeoNode DC", "DI Res", "DI Mobile", "Donut Browser", "pure_http", "session_assisted_http"
         ):
             self.set_enabled(capability_id, False)
 
@@ -235,6 +248,8 @@ class ProviderRegistry:
             "Scrapfly": ("providers.scrapfly_adapter", "ScrapflyProvider"),
             "pure_http": ("providers.pure_http_adapter", "PureHttpProvider"),
             "PureHTTP": ("providers.pure_http_adapter", "PureHttpProvider"),
+            "session_assisted_http": ("providers.session_assisted_http_adapter", "SessionAssistedHttpProvider"),
+            "SessionAssistedHTTP": ("providers.session_assisted_http_adapter", "SessionAssistedHttpProvider"),
         }
         module_name, class_name = adapter_types[provider_id]
         module = __import__(module_name, fromlist=[class_name])
